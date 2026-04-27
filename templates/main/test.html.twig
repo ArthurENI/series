@@ -1,53 +1,43 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'base.html.twig' %}
 
-<h1>Bienvenue sur les tests !</h1>
+{% block body %}
+    <h1>Bienvenue sur les tests !</h1>
 
-{# Ceci est un commentaire #}
+    {# Ceci est un commentaire #}
 
-{# Création de variable #}
-{% set name = "Sylvain" %}
+    {# Création de variable #}
+    {% set name = "Sylvain" %}
 
-{# Lecture de variable #}
-<h2>Bienvenue {{ name }}</h2>
+    {# Lecture de variable #}
+    <h2>Bienvenue {{ name }}</h2>
 
-{# Création d'un tableau #}
-{% set colors = ["red","blue","pink","green"] %}
+    {# Création d'un tableau #}
+    {% set colors = ["red","blue","pink","green"] %}
 
-{% for color in colors %}
-    {% if loop.first %}
-        <p>Première couleur :</p>
-    {% elseif loop.last %}
-        <p>Dernière couleur :</p>
-    {% endif %}
-    <div style="background-color: {{ color }}">{{ color }}</div>
-    <div>Index : {{ loop.index0 }}</div>
-{% endfor %}
+    {% for color in colors %}
+        {% if loop.first %}
+            <p>Première couleur :</p>
+        {% elseif loop.last %}
+            <p>Dernière couleur :</p>
+        {% endif %}
+        <div style="background-color: {{ color }}">{{ color }}</div>
+        <div>Index : {{ loop.index0 }}</div>
+    {% endfor %}
 
-{# Utilisation d'objet #}
-{% set serie = {
-    'name' : 'Code Suantum',
-    'year' : 1990
-} %}
-<div>Nom de la série : {{ serie.name }}</div>
+    {# Utilisation d'objet #}
+    {% set serie = {
+        'name' : 'Code Suantum',
+        'year' : 1990
+    } %}
+    <div>Nom de la série : {{ serie.name }}</div>
 
-{# Quelques filtres #}
-<h2>Filtres</h2>
-<div>Prnéom en majuscule : {{ name| upper }}</div>
-<div>Taille du tableau :{{ colors| length }}</div>
-<div> Joindre un tableau : :{{ colors | join('-') }}</div>
-<div>Date du jour : {{ "now" |  date('d/m/Y') }}</div>
+    {# Quelques filtres #}
+    <h2>Filtres</h2>
+    <div>Prnéom en majuscule : {{ name| upper }}</div>
+    <div>Taille du tableau : {{ colors| length }}</div>
+    <div> Joindre un tableau : :{{ colors | join('-') }}</div>
+    <div>Date du jour : {{ "now" |  date('d/m/Y') }}</div>
+
+{% endblock %}
 
 
-
-
-</body>
-</html>

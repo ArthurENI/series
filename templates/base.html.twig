@@ -8,10 +8,19 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
 
+        <link rel="icon" href="{{ asset('img/icon.png') }}">
+
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     </head>
     <body>
+
+    <div class="container">
         <header>
-            <h1>Welcome in Series !</h1>
+            <h1><a href="{{ path('main_home') }}"> <img src="{{ asset('img/logo.svg') }}" alt="series"></a></h1>
             {%  include 'views/nav/nav.htlm.twig' %}
         </header>
         <main>
@@ -20,5 +29,6 @@
         <footer>
             {%  include 'views/nav/nav.htlm.twig' %}
         </footer>
+    </div>
     </body>
 </html>

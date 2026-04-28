@@ -2,4 +2,18 @@
 
 {% block body %}
     <h2>List of TV-Shows</h2>
+
+    <section class="series-list">
+        {% for serie in series %}
+            <article>
+{#                <div>{{ serie.name }}</div>#}
+                <a href="{{ path('serie_detail', {'id':serie.id}) }}">
+                    <img src="{{ asset('img/posters/series/' ~ serie.poster)}}" alt="{{ serie.name }}">
+                </a>
+
+            </article>
+        {% endfor %}
+    </section>
+
+
 {% endblock %}

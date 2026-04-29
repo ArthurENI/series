@@ -18,7 +18,9 @@ final class SerieController extends AbstractController
     {
 //        $series = $serieRepository->findAll();
 //        $series = $serieRepository->findBy(["status" => "ended"], ['name' => 'ASC']);
-        $series = $serieRepository->findBy([], ['popularity' => 'DESC']);
+//        $series = $serieRepository->findBy([], ['popularity' => 'DESC']);
+        $series = $serieRepository->findBestSeries();
+
         return $this->render('serie/list.html.twig',[
             'series' => $series
         ]);
@@ -33,6 +35,10 @@ final class SerieController extends AbstractController
 
         $serie = $serieRepository->find($id);
 //        $serie = $serieRepository->findOneBy(['id' => $id]);
+
+        if (!$serie) {
+            throw $this->createNotFoundException("Serie not found");
+        }
 
         return $this->render('serie/detail.html.twig',[
             'serie' => $serie
@@ -73,10 +79,14 @@ final class SerieController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['GET'])]
-    public function delete(int $id): Response
+    public function delete(int $id,SerieRepository $serieRepository,EntityManagerInterface $entityManager): Response
     {
-        //TODO supprimer une série
-        return $this->render('serie/list.html.twig');
+        $serie = $serieRepository->find($id);
+        if ($serie) {
+            $entityManager->remove($serie);
+        }
+        $entityManager->flush();
+        return $this->redirectToRoute('serie_list');
     }
 
 

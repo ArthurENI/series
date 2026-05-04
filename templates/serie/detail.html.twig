@@ -3,9 +3,9 @@
 
 {% block extraStyles %}
     <style>
-        body{
-            background-image: linear-gradient(rgb(0,0,0,0.9), rgba(0,0,0,0.2)),
-             url("{{ asset('img/backdrops/' ~ serie.backdrop) }}");
+        body {
+            background-image: linear-gradient(rgb(0, 0, 0, 0.9), rgba(0, 0, 0, 0.2)),
+            url("{{ asset('img/backdrops/' ~ serie.backdrop) }}");
         }
     </style>
 {% endblock %}
@@ -15,18 +15,37 @@
     <section>
         <div class="serie-details">
             <div>
-                <img src="{{ asset('img/posters/series/' ~ serie.poster)}}" alt="{{ serie.name }}">
+                <img src="{{ asset('img/posters/series/' ~ serie.poster) }}" alt="{{ serie.name }}">
             </div>
             <div class="serie-details-infos">
                 <h2>Detail of {{ serie.name }}</h2>
-                <div><a class="link_button" href="{{ path('serie_delete', {'id': serie.id}) }}" onclick="return confirm('Are you sure you want to delete {{ serie.name }} ?')"> Delete</a>
-                <a class="link_button" href="{{ path('serie_update', {'id': serie.id}) }}"> Update</a></div>
+                <div>
+                    <a class="link_button" href="{{ path('serie_delete', {'id': serie.id}) }}"
+                        onclick="return confirm('Are you sure you want to delete {{ serie.name }} ?')">Delete</a>
+                    <a class="link_button" href="{{ path('serie_update', {'id': serie.id}) }}">Update</a>
+                    <a class="link_button" href="{{ path('season_create_with_serie', {'id': serie.id}) }}">Add season</a></div>
                 <div>User ratings : {{ serie.vote }}</div>
                 <div>Categorized in : {{ serie.genres }}</div>
                 <div>Serie status : {{ serie.status }}</div>
-                <div>Aired from : {{ serie.firstAirDate | date('Y-m-d') }} to {{ serie.lastAirDate | date('Y-m-d') }} </div>
+                <div>Aired from : {{ serie.firstAirDate | date('Y-m-d') }}
+                    to {{ serie.lastAirDate | date('Y-m-d') }} </div>
                 <div>{{ serie.overview | nl2br }}</div>
             </div>
+        </div>
+
+        <div class="seasons">
+            <h3>Season !</h3>
+            {% for season in serie.seasons %}
+                <article>
+                    <img src="{{ asset('img/posters/seasons/'~ season.poster) }}"
+                         alt="{{ serie.name }} #{{ season.number }}">
+                    <div>
+                        <h4>#{{ season.number }}</h4>
+                        <div>{{ season.firstAirDate | date('d/m/Y') }}</div>
+                        <div>{{ season.overview | nl2br }}</div>
+                    </div>
+                </article>
+            {% endfor %}
         </div>
     </section>
 

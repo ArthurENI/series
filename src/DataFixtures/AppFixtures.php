@@ -3,31 +3,33 @@
 namespace App\DataFixtures;
 
 use App\Entity\Serie;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+
+
+    public function __construct(private UserPasswordHasherInterface $passwordHasher)
+    {
+    }
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
 
         for ($i = 0; $i < 50; ++$i) {
-            $serie = new Serie();
-            $serie->setBackdrop("backdrop.png")
-                ->setDateCreated(new \DateTime())
-                ->setFirstAirDate($faker->dateTimeBetween('-3 year'))
-                ->setName($faker->jobTitle())
-                ->setGenres($faker->randomElement(['Fantastique','Drama','SF']))
-                ->setLastAirDate($faker->dateTimeBetween($serie->getFirstAirDate()))
-                ->setPopularity($faker->numberBetween(0, 9999))
-                ->setPoster('poster.png')
-                ->setStatus($faker->randomElement(['canceled','returning','ended']))
-                ->setTmdbId($faker->randomNumber(6))
-                ->setVote($faker->numberBetween(1, 10))
+            $user = new User();
+            $user->setRoles(['ROLE_USER'])
+                ->setEmail($faker->email())
+                ->setFirstName($faker->firstName())
+                ->setLastName($faker->lastName())
+                ->setPassword($this->passwordHasher->hashPassword($user, 'aze'));
             ;
-            $manager->persist($serie);
+            $manager->persist($user);
         }
         $manager->flush();
     }

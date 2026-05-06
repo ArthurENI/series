@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SerieRepository::class)]
@@ -15,18 +16,22 @@ class Serie
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['serie-read'])]
     private ?int $id = null;
 
     #[Assert\NotBlank(message:"The name is required !")]
     #[Assert\Length( min: 2, max: 255, minMessage: "Min 2 characters", maxMessage: "Max 255 characters")]
     #[ORM\Column(length: 255)]
+    #[Groups(['serie-read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['serie-read'])]
     private ?string $overview = null;
 
     #[Assert\Choice(choices: ["ended","canceled","returning"],message: "Value not ok !")]
     #[ORM\Column(length: 50)]
+    #[Groups(['serie-read'])]
     private ?string $status = null;
 
     #[Assert\Range( notInRangeMessage: "Vote must be between {{ min }} and {{ max }}", min: 0, max: 10)]
@@ -37,6 +42,7 @@ class Serie
     private ?string $popularity = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['serie-read'])]
     private ?string $genres = null;
 
     #[Assert\LessThan(propertyPath: "lastAirDate", message: "Date must be before last airDate") ]
@@ -68,7 +74,12 @@ class Serie
      */
     //cascade['remove'] ou orphanRemoval: true pour suppr les seasons lors de la suppr d'une série
     #[ORM\OneToMany(targetEntity: Season::class, mappedBy: 'serie', orphanRemoval: true)]
+    #[Groups(['serie-read'])]
     private Collection $seasons;
+
+    #[ORM\Column]
+    #[Groups(['serie-like'])]
+    private ?int $nbLike = null;
 
     public function __construct()
     {
@@ -262,6 +273,18 @@ class Serie
                 $season->setSerie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNbLike(): ?int
+    {
+        return $this->nbLike;
+    }
+
+    public function setNbLike(int $nbLike): static
+    {
+        $this->nbLike = $nbLike;
 
         return $this;
     }
